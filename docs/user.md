@@ -116,7 +116,7 @@ Response Body (Success):
 {
   "data": {
     "username": "JohnDoe",
-    "name": "John Doe updated"
+    "name": "John Doe New"
   }
 }
 ```
