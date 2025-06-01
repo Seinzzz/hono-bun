@@ -3,7 +3,7 @@ import {
   RegisterUserRequest,
   toUserResponse,
   UserResponse,
-} from '../models/user.model'
+} from '../model/user.model'
 import { UserValidation } from '../validation/user.validation'
 import { HTTPException } from 'hono/http-exception'
 

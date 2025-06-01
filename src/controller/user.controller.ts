@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { RegisterUserRequest } from '../models/user.model'
+import { RegisterUserRequest } from '../model/user.model'
 import { UserService } from '../service/user.service'
 
 export const userController = new Hono()
