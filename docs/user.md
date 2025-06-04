@@ -8,9 +8,9 @@ Request Body:
 
 ```json
 {
-  "username": "JohnDoe",
+  "username": "johndoe",
   "password": "secret",
-  "name": "John Doe"
+  "name": "john doe"
 }
 ```
 
@@ -19,8 +19,8 @@ Response Body (Success):
 ```json
 {
   "data": {
-    "username": "JohnDoe",
-    "name": "John Doe"
+    "username": "johndoe",
+    "name": "john doe"
   }
 }
 ```
@@ -41,7 +41,7 @@ Request Body:
 
 ```json
 {
-  "username": "JohnDoe",
+  "username": "johndoe",
   "password": "secret"
 }
 ```
@@ -51,8 +51,8 @@ Response Body (Success):
 ```json
 {
   "data": {
-    "username": "JohnDoe",
-    "name": "John Doe",
+    "username": "johndoe",
+    "name": "john doe",
     "token": "token"
   }
 }
@@ -79,8 +79,8 @@ Response Body (Success):
 ```json
 {
   "data": {
-    "username": "JohnDoe",
-    "name": "John Doe"
+    "username": "johndoe",
+    "name": "john doe"
   }
 }
 ```
@@ -105,7 +105,7 @@ Request Body:
 
 ```json
 {
-  "name": "John Doe Natio",
+  "name": "john doe natio",
   "password": "newsecret"
 }
 ```
@@ -115,8 +115,8 @@ Response Body (Success):
 ```json
 {
   "data": {
-    "username": "JohnDoe",
-    "name": "John Doe New"
+    "username": "johndoe",
+    "name": "john doe natio"
   }
 }
 ```

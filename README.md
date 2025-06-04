@@ -1,10 +1,10 @@
-<div align="center">
+<h1 align="center">
 
 🚧 **WIP** 🚧
 
 ![GitHub license](https://img.shields.io/github/license/seinzzz/hono-bun)
 
-</div>
+</h1>
 
 # Backend Contact Management System
 
