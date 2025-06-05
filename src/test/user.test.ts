@@ -208,6 +208,7 @@ describe('PATCH /api/users/current', () => {
 
     expect(body.errors).toBeDefined()
   })
+
   it('should be able to update name', async () => {
     const response = await app.request('/api/users/current', {
       method: 'PATCH',
@@ -259,6 +260,7 @@ describe('PATCH /api/users/current', () => {
   })
 })
 
+// logout test
 describe('DELETE /api/users/logout', () => {
   beforeEach(async () => {
     await UserTest.create()
