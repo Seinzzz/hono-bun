@@ -92,4 +92,18 @@ export class ContactService {
 
     return toContactResponse(contact)
   }
+
+  static async delete(user: User, contactId: number): Promise<boolean> {
+    contactId = ContactValidation.DELETE.parse(contactId)
+    await this.contactMustExist(user, contactId)
+
+    await prismaClient.contact.delete({
+      where: {
+        username: user.username,
+        id: contactId,
+      },
+    })
+
+    return true
+  }
 }
