@@ -21,8 +21,9 @@ app.onError(async (err, c) => {
     })
   } else if (err instanceof ZodError) {
     c.status(400)
+    console.log('ZodError:', err.errors)
     return c.json({
-      errors: err.message,
+      errors: err.errors,
     })
   } else {
     c.status(500)

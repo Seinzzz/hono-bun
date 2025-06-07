@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'bun:test'
 import { ContactTest, UserTest } from './test.utils'
 import app from '..'
+import { ContactResponse } from '../model/contact.model'
 
 // contact create tests
 describe('POST /api/contacts', () => {
@@ -91,7 +92,7 @@ describe('GET /api/contacts/:id', () => {
     await UserTest.delete()
   })
 
-  it('should reject if contact id invalid', async () => {
+  it('should reject if contact id is not found', async () => {
     const contact = await ContactTest.get()
 
     const response = await app.request(`/api/contacts/${contact.id + 1}`, {
@@ -125,5 +126,86 @@ describe('GET /api/contacts/:id', () => {
     expect(body.data.last_name).toBe(contact.last_name)
     expect(body.data.email).toBe(contact.email)
     expect(body.data.phone).toBe(contact.phone)
+  })
+})
+
+// update contact tests
+describe('PUT /api/contacts/:id', () => {
+  beforeEach(async () => {
+    await ContactTest.deleteAll()
+    await UserTest.create()
+    await ContactTest.create()
+  })
+
+  afterEach(async () => {
+    await ContactTest.deleteAll()
+    await UserTest.delete()
+  })
+
+  it('should rejected update if request invalid', async () => {
+    const contact = await ContactTest.get()
+
+    const response = await app.request(`/api/contacts/${contact.id}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: 'test',
+      },
+      body: JSON.stringify({
+        first_name: ' ', // invalid first_name cannot be empty or whitespace
+      }),
+    })
+
+    expect(response.status).toBe(400)
+    const body = await response.json()
+
+    expect(body.errors).toBeDefined()
+  })
+
+  it('should reject if contact id is not found', async () => {
+    const contact = await ContactTest.get()
+
+    const response = await app.request(`/api/contacts/${contact.id + 1}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: 'test',
+      },
+      body: JSON.stringify({
+        first_name: 'yssc',
+        last_name: 'tmr',
+        email: 'yssctmr@gmail.com',
+        phone: '081234567890',
+      }),
+    })
+
+    expect(response.status).toBe(404)
+    const body = await response.json()
+
+    expect(body.errors).toBeDefined()
+  })
+
+  it('should success update contact if request valid', async () => {
+    const contact = await ContactTest.get()
+
+    const response = await app.request(`/api/contacts/${contact.id}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: 'test',
+      },
+      body: JSON.stringify({
+        first_name: 'yssc',
+        last_name: 'tmr',
+        email: 'yssctmr@gmail.com',
+        phone: '081234567890',
+      }),
+    })
+
+    expect(response.status).toBe(200)
+    const body = await response.json()
+
+    expect(body.data.id).toBe(contact.id)
+    expect(body.data.first_name).toBe('yssc')
+    expect(body.data.last_name).toBe('tmr')
+    expect(body.data.email).toBe('yssctmr@gmail.com')
+    expect(body.data.phone).toBe('081234567890')
   })
 })
