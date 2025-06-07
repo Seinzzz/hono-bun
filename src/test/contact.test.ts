@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'bun:test'
 import { ContactTest, UserTest } from './test.utils'
 import app from '..'
-import { logger } from '../application/logging'
 
 // contact create tests
 describe('POST /api/contacts', () => {
@@ -76,5 +75,55 @@ describe('POST /api/contacts', () => {
     expect(body.data.last_name).toBe('tmr')
     expect(body.data.email).toBe('yssctmr@email.com')
     expect(body.data.phone).toBe('081437777777')
+  })
+})
+
+// get contact tests
+describe('GET /api/contacts/:id', () => {
+  beforeEach(async () => {
+    await ContactTest.deleteAll()
+    await UserTest.create()
+    await ContactTest.create()
+  })
+
+  afterEach(async () => {
+    await ContactTest.deleteAll()
+    await UserTest.delete()
+  })
+
+  it('should reject if contact id invalid', async () => {
+    const contact = await ContactTest.get()
+
+    const response = await app.request(`/api/contacts/${contact.id + 1}`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'test',
+      },
+    })
+
+    expect(response.status).toBe(404)
+    const body = await response.json()
+
+    expect(body.errors).toBeDefined()
+  })
+
+  it('should get contact if contact is exist', async () => {
+    const contact = await ContactTest.get()
+
+    const response = await app.request(`/api/contacts/${contact.id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'test',
+      },
+    })
+
+    expect(response.status).toBe(200)
+    const body = await response.json()
+
+    expect(body.data.id).toBe(contact.id)
+    expect(body.data.first_name).toBe(contact.first_name)
+    expect(body.data.last_name).toBe(contact.last_name)
+    expect(body.data.email).toBe(contact.email)
+    expect(body.data.phone).toBe(contact.phone)
   })
 })
