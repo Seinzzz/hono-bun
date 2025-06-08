@@ -15,7 +15,7 @@ This is a backend service for managing contacts, built with Bun and Hono. It pro
 - User registration and login
 - Token-based authentication
 - Contact management (create, read, update, delete)
-- Search contacts by name
+- Search contacts by name, email, phone
 - Pagination support for contact lists
 - Error handling and validation
 
