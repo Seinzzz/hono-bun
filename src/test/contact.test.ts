@@ -1,8 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'bun:test'
 import { ContactTest, UserTest } from './test.utils'
 import app from '..'
-import { ContactResponse } from '../model/contact.model'
-import { contactController } from '../controller/contact.controller'
 
 // contact create tests
 describe('POST /api/contacts', () => {

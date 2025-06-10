@@ -1,0 +1,95 @@
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test'
+import { AddressTest, ContactTest, UserTest } from './test.utils'
+import app from '..'
+
+describe('POST /api/contacts/:id/addresses', () => {
+  beforeEach(async () => {
+    await AddressTest.deleteAll()
+    await ContactTest.deleteAll()
+    await UserTest.create()
+    await ContactTest.create()
+  })
+
+  afterEach(async () => {
+    await AddressTest.deleteAll()
+    await ContactTest.deleteAll()
+    await UserTest.delete()
+  })
+
+  it('should rejected if request is invalid', async () => {
+    const contact = await ContactTest.get()
+    const response = await app.request(
+      `/api/contacts/${contact.id}/addresses`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: 'test',
+        },
+        body: JSON.stringify({
+          country: '',
+          postal_code: '',
+        }),
+      }
+    )
+
+    expect(response.status).toBe(400)
+
+    const body = await response.json()
+    expect(body.errors).toBeDefined()
+  })
+
+  it('should rejected if contact not found', async () => {
+    const contact = await ContactTest.get()
+    const response = await app.request(
+      `/api/contacts/${contact.id + 1}/addresses`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: 'test',
+        },
+        body: JSON.stringify({
+          street: 'test street',
+          city: 'test city',
+          province: 'test province',
+          country: 'test country',
+          postal_code: '12345',
+        }),
+      }
+    )
+
+    expect(response.status).toBe(404)
+
+    const body = await response.json()
+    expect(body.errors).toBeDefined()
+  })
+
+  it('should create address successfully', async () => {
+    const contact = await ContactTest.get()
+    const response = await app.request(
+      `/api/contacts/${contact.id}/addresses`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: 'test',
+        },
+        body: JSON.stringify({
+          street: 'test street',
+          city: 'test city',
+          province: 'test province',
+          country: 'test country',
+          postal_code: '1437',
+        }),
+      }
+    )
+
+    expect(response.status).toBe(200)
+
+    const body = await response.json()
+    expect(body.data.id).toBeDefined()
+    expect(body.data.street).toBe('test street')
+    expect(body.data.city).toBe('test city')
+    expect(body.data.province).toBe('test province')
+    expect(body.data.country).toBe('test country')
+    expect(body.data.postal_code).toBe('1437')
+  })
+})
