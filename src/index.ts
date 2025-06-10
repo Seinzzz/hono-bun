@@ -3,6 +3,8 @@ import { userController } from './controller/user.controller'
 import { HTTPException } from 'hono/http-exception'
 import { ZodError } from 'zod'
 import { contactController } from './controller/contact.controller'
+import { logger } from './application/logging'
+import { $ZodError } from 'zod/v4/core'
 
 const app = new Hono()
 
@@ -19,11 +21,10 @@ app.onError(async (err, c) => {
     return c.json({
       errors: err.message,
     })
-  } else if (err instanceof ZodError) {
+  } else if (err instanceof $ZodError) {
     c.status(400)
-    console.log('ZodError:', err.errors)
     return c.json({
-      errors: err.errors,
+      errors: err.issues[0].message,
     })
   } else {
     c.status(500)

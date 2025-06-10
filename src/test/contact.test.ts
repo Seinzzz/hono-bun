@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'bun:test'
 import { ContactTest, UserTest } from './test.utils'
 import app from '..'
 import { ContactResponse } from '../model/contact.model'
+import { contactController } from '../controller/contact.controller'
 
 // contact create tests
 describe('POST /api/contacts', () => {
@@ -210,6 +211,7 @@ describe('PUT /api/contacts/:id', () => {
   })
 })
 
+// delete contact tests
 describe('DELETE /api/contacts/:id', () => {
   beforeEach(async () => {
     await ContactTest.deleteAll()
@@ -253,5 +255,195 @@ describe('DELETE /api/contacts/:id', () => {
 
     expect(body.data).toBeDefined()
     expect(body.data).toBe(true)
+  })
+})
+
+//search contact tests
+describe('GET /api/contacts', () => {
+  beforeEach(async () => {
+    await UserTest.create()
+    await ContactTest.createMany(25)
+  })
+
+  afterEach(async () => {
+    await ContactTest.deleteAll()
+    await UserTest.delete()
+  })
+
+  it('should be able to search contacts', async () => {
+    const response = await app.request(`/api/contacts`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'test',
+      },
+    })
+
+    expect(response.status).toBe(200)
+    const body = await response.json()
+
+    expect(body.data).toBeDefined()
+    expect(body.data.length).toBe(10)
+    expect(body.paging.current_page).toBe(1)
+    expect(body.paging.total_page).toBe(3)
+    expect(body.paging.size).toBe(10)
+  })
+  it('should be able to search contact using name', async () => {
+    const response = await app.request(`/api/contacts?name=eya`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'test',
+      },
+    })
+
+    expect(response.status).toBe(200)
+    const body = await response.json()
+
+    expect(body.data).toBeDefined()
+    expect(body.data.length).toBe(10)
+    expect(body.paging.current_page).toBe(1)
+    expect(body.paging.total_page).toBe(3)
+    expect(body.paging.size).toBe(10)
+  })
+
+  it('should be able to search contact using email', async () => {
+    const response = await app.request(`/api/contacts?email=gmail`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'test',
+      },
+    })
+
+    expect(response.status).toBe(200)
+    const body = await response.json()
+
+    expect(body.data).toBeDefined()
+    expect(body.data.length).toBe(10)
+    expect(body.paging.current_page).toBe(1)
+    expect(body.paging.total_page).toBe(3)
+    expect(body.paging.size).toBe(10)
+  })
+
+  it('should be able to search contact using phone', async () => {
+    const response = await app.request(`/api/contacts?phone=08`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'test',
+      },
+    })
+
+    expect(response.status).toBe(200)
+    const body = await response.json()
+
+    expect(body.data).toBeDefined()
+    expect(body.data.length).toBe(10)
+    expect(body.paging.current_page).toBe(1)
+    expect(body.paging.total_page).toBe(3)
+    expect(body.paging.size).toBe(10)
+  })
+
+  it('should be able to search without results', async () => {
+    // not found by name
+    let response = await app.request(`/api/contacts?name=ysc`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'test',
+      },
+    })
+
+    expect(response.status).toBe(200)
+    let body = await response.json()
+
+    expect(body.data).toBeDefined()
+    expect(body.data.length).toBe(0)
+    expect(body.paging.current_page).toBe(1)
+    expect(body.paging.total_page).toBe(0)
+    expect(body.paging.size).toBe(10)
+
+    // not found by email
+    response = await app.request(`/api/contacts?email=ysc`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'test',
+      },
+    })
+
+    expect(response.status).toBe(200)
+    body = await response.json()
+
+    expect(body.data).toBeDefined()
+    expect(body.data.length).toBe(0)
+    expect(body.paging.current_page).toBe(1)
+    expect(body.paging.total_page).toBe(0)
+    expect(body.paging.size).toBe(10)
+
+    // not found by number
+    response = await app.request(`/api/contacts?phone=999`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'test',
+      },
+    })
+
+    expect(response.status).toBe(200)
+    body = await response.json()
+
+    expect(body.data).toBeDefined()
+    expect(body.data.length).toBe(0)
+    expect(body.paging.current_page).toBe(1)
+    expect(body.paging.total_page).toBe(0)
+    expect(body.paging.size).toBe(10)
+  })
+
+  it('should be able to search with paging', async () => {
+    // search with size 5
+    let response = await app.request(`/api/contacts?size=5`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'test',
+      },
+    })
+
+    expect(response.status).toBe(200)
+    let body = await response.json()
+
+    expect(body.data).toBeDefined()
+    expect(body.data.length).toBe(5)
+    expect(body.paging.current_page).toBe(1)
+    expect(body.paging.total_page).toBe(5)
+    expect(body.paging.size).toBe(5)
+
+    // search with size 5 and page 2
+    response = await app.request(`/api/contacts?size=5&page=2`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'test',
+      },
+    })
+
+    expect(response.status).toBe(200)
+    body = await response.json()
+
+    expect(body.data).toBeDefined()
+    expect(body.data.length).toBe(5)
+    expect(body.paging.current_page).toBe(2)
+    expect(body.paging.total_page).toBe(5)
+    expect(body.paging.size).toBe(5)
+
+    // search size 5 and page 100 (should return empty data)
+    response = await app.request(`/api/contacts?size=5&page=100`, {
+      method: 'GET',
+      headers: {
+        Authorization: 'test',
+      },
+    })
+
+    expect(response.status).toBe(200)
+    body = await response.json()
+
+    expect(body.data).toBeDefined()
+    expect(body.data.length).toBe(0)
+    expect(body.paging.current_page).toBe(100)
+    expect(body.paging.total_page).toBe(5)
+    expect(body.paging.size).toBe(5)
   })
 })
