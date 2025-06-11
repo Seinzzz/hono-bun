@@ -128,7 +128,7 @@ describe('GET /api/contacts/:id', () => {
   })
 })
 
-// update contact tests
+// contact update tests
 describe('PUT /api/contacts/:id', () => {
   beforeEach(async () => {
     await ContactTest.deleteAll()
@@ -209,7 +209,7 @@ describe('PUT /api/contacts/:id', () => {
   })
 })
 
-// delete contact tests
+// contact delete tests
 describe('DELETE /api/contacts/:id', () => {
   beforeEach(async () => {
     await ContactTest.deleteAll()
@@ -256,7 +256,7 @@ describe('DELETE /api/contacts/:id', () => {
   })
 })
 
-//search contact tests
+// contact search tests
 describe('GET /api/contacts', () => {
   beforeEach(async () => {
     await UserTest.create()
