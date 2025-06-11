@@ -37,7 +37,7 @@ Response Body :
 
 ## Get Address
 
-Endpoint : `GET` `api/contacts/{id}/addresses`
+Endpoint : `GET` `api/contacts/{contact_id}/addresses/{id}`
 
 Request Header:
 
