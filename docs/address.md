@@ -2,7 +2,7 @@
 
 ## Create Address
 
-Endpoint : `POST` `api/contacts/{id}/addresses`
+Endpoint : `POST` `/api/contacts/{id}/addresses`
 
 Request Header:
 
@@ -37,7 +37,7 @@ Response Body :
 
 ## Get Address
 
-Endpoint : `GET` `api/contacts/{contact_id}/addresses/{id}`
+Endpoint : `GET` `/api/contacts/{contact_id}/addresses/{id}`
 
 Request Header:
 
@@ -60,7 +60,7 @@ Response Body :
 
 ## Update Address
 
-Endpoint : `PUT` `api/contacts/{id}/addresses`
+Endpoint : `PUT` `/api/contacts/{id}/addresses`
 
 Request Header:
 
@@ -95,7 +95,7 @@ Response Body :
 
 ## Delete Address
 
-Endpoint : `DELETE` `api/contacts/{id}/addresses`
+Endpoint : `DELETE` `/api/contacts/{id}/addresses`
 
 Request Header:
 
@@ -111,7 +111,7 @@ Response Body :
 
 ## List Addresses
 
-Endpoint : `GET` `api/contacts/{id}/addresses`
+Endpoint : `GET` `/api/contacts/{id}/addresses`
 
 Request Header:
 
