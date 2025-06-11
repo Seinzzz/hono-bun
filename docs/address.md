@@ -37,7 +37,7 @@ Response Body :
 
 ## Get Address
 
-Endpoint : `GET` `/api/contacts/{contactId}/addresses/{id}`
+Endpoint : `GET` `/api/contacts/{contactId}/addresses/{addressId}`
 
 Request Header:
 
@@ -60,7 +60,7 @@ Response Body :
 
 ## Update Address
 
-Endpoint : `PUT` `/api/contacts/{contactId}/addresses/{id}`
+Endpoint : `PUT` `/api/contacts/{contactId}/addresses/{addressId}`
 
 Request Header:
 
@@ -95,7 +95,7 @@ Response Body :
 
 ## Delete Address
 
-Endpoint : `DELETE` `/api/contacts/{contactId}/addresses/{id}`
+Endpoint : `DELETE` `/api/contacts/{contactId}/addresses/{addressId}`
 
 Request Header:
 
@@ -111,7 +111,7 @@ Response Body :
 
 ## List Addresses
 
-Endpoint : `GET` `/api/contacts/{id}/addresses`
+Endpoint : `GET` `/api/contacts/{contactId}/addresses`
 
 Request Header:
 
