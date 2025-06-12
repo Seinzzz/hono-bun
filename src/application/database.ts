@@ -1,6 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 import { logger } from './logging'
 
+/**
+ * Prisma Client instance for database operations.
+ * This client is configured to log query, error, info, and warn events.
+ * It also sets up listeners to log these events using the application's logger.
+ */
 export const prismaClient = new PrismaClient({
   log: [
     {
@@ -22,6 +27,7 @@ export const prismaClient = new PrismaClient({
   ],
 })
 
+// Log Prisma events to the logger
 prismaClient.$on('query', (e: any) => {
   logger.info(e)
 })
