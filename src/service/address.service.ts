@@ -1,9 +1,10 @@
-import { User } from '@prisma/client'
+import { Address, User } from '@prisma/client'
 import {
   AddressResponse,
   CreateAddressRequest,
   GetAddressRequest,
   toAddressResponse,
+  UpdateAddressRequest,
 } from '../model/address.model'
 import { AddressValidation } from '../validation/address.validation'
 import { prismaClient } from '../application/database'
@@ -11,6 +12,12 @@ import { ContactService } from './contact.service'
 import { HTTPException } from 'hono/http-exception'
 
 export class AddressService {
+  /**
+   * Create a new address for a specific contact
+   * @param user User who is creating the address
+   * @param request Address data to be created
+   * @returns Created address response
+   */
   static async create(
     user: User,
     request: CreateAddressRequest
@@ -26,6 +33,12 @@ export class AddressService {
     return toAddressResponse(address)
   }
 
+  /**
+   * Get an address by ID for a specific contact
+   * @param user User who is requesting the address
+   * @param request Request containing contact_id and address id
+   * @returns Address response
+   */
   static async get(
     user: User,
     request: GetAddressRequest
@@ -33,10 +46,19 @@ export class AddressService {
     request = AddressValidation.GET.parse(request) as GetAddressRequest
     await ContactService.contactMustExist(user, request.contact_id)
 
+    const address = await this.addressMustExist(request.contact_id, request.id)
+
+    return toAddressResponse(address)
+  }
+
+  static async addressMustExist(
+    contactId: number,
+    addressId: number
+  ): Promise<Address> {
     const address = await prismaClient.address.findFirst({
       where: {
-        id: request.id,
-        contact_id: request.contact_id,
+        id: addressId,
+        contact_id: contactId,
       },
     })
 
@@ -45,6 +67,32 @@ export class AddressService {
         message: 'Address not found',
       })
     }
+
+    return address
+  }
+
+  /**
+   * Update an existing address for a specific contact
+   * @param user User who is updating the address
+   * @param request Address data to be updated
+   * @returns Updated address response
+   */
+  static async update(
+    user: User,
+    request: UpdateAddressRequest
+  ): Promise<AddressResponse> {
+    request = AddressValidation.UPDATE.parse(request) as UpdateAddressRequest
+
+    await ContactService.contactMustExist(user, request.contact_id)
+    await this.addressMustExist(request.contact_id, request.id)
+
+    const address = await prismaClient.address.update({
+      where: {
+        id: request.id,
+        contact_id: request.contact_id,
+      },
+      data: request,
+    })
 
     return toAddressResponse(address)
   }
