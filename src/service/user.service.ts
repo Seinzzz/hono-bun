@@ -11,9 +11,14 @@ import { UserValidation } from '../validation/user.validation'
 import { HTTPException } from 'hono/http-exception'
 
 export class UserService {
+  /**
+   * Register user
+   * @param request - get username and password from request body
+   * @returns return UserResponse
+   */
   static async register(request: RegisterUserRequest): Promise<UserResponse> {
-    //validasi
-    request = UserValidation.REGISTER.parse(request)
+    request = UserValidation.REGISTER.parse(request) as RegisterUserRequest
+
     // cek username sudah ada
     const userWithSameUsername = await prismaClient.user.count({
       where: {
@@ -39,8 +44,13 @@ export class UserService {
     return toUserResponse(user)
   }
 
+  /**
+   * Login user
+   * @param request - get username and password from request body
+   * @returns return UserResponse with token
+   */
   static async login(request: LoginUserRequest): Promise<UserResponse> {
-    request = UserValidation.LOGIN.parse(request)
+    request = UserValidation.LOGIN.parse(request) as LoginUserRequest
 
     //cek username
     let user = await prismaClient.user.findUnique({
@@ -82,6 +92,11 @@ export class UserService {
     return response
   }
 
+  /**
+   * Get user by token
+   * @param token - token from request header
+   * @returns User
+   */
   static async getUserByToken(token: string | undefined | null): Promise<User> {
     const result = UserValidation.TOKEN.safeParse(token)
 
@@ -110,7 +125,7 @@ export class UserService {
     user: User,
     request: UpdateUserRequest
   ): Promise<UserResponse> {
-    request = UserValidation.UPDATE.parse(request)
+    request = UserValidation.UPDATE.parse(request) as UpdateUserRequest
 
     if (request.name) {
       user.name = request.name
@@ -135,7 +150,7 @@ export class UserService {
   }
 
   static async logout(user: User): Promise<boolean> {
-    user = await prismaClient.user.update({
+    await prismaClient.user.update({
       where: {
         username: user.username,
       },

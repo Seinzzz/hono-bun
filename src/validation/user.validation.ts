@@ -1,4 +1,4 @@
-import { z, ZodType } from 'zod'
+import { z, ZodType } from 'zod/v4'
 
 export class UserValidation {
   static readonly REGISTER: ZodType = z.object({

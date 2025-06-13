@@ -97,7 +97,7 @@ describe('POST /api/users/login', () => {
     const response = await app.request('/api/users/login', {
       method: 'POST',
       body: JSON.stringify({
-        username: 'Fre',
+        username: 'fre',
         password: 'test',
       }),
     })
