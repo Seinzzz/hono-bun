@@ -6,6 +6,7 @@ import { AddressService } from '../service/address.service'
 import {
   CreateAddressRequest,
   GetAddressRequest,
+  RemoveAddressRequest,
   UpdateAddressRequest,
 } from '../model/address.model'
 
@@ -63,6 +64,24 @@ addressController.put(
     request.id = addressId
 
     const response = await AddressService.update(user, request)
+
+    return c.json({
+      data: response,
+    })
+  }
+)
+
+addressController.delete(
+  '/api/contacts/:contact_id/addresses/:address_id',
+  async (c) => {
+    const user = c.get('user') as User
+
+    const request: RemoveAddressRequest = {
+      id: Number(c.req.param('address_id')),
+      contact_id: Number(c.req.param('contact_id')),
+    }
+
+    const response = await AddressService.delete(user, request)
 
     return c.json({
       data: response,

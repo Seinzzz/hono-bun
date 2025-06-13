@@ -258,3 +258,61 @@ describe('PUT /api/contacts/:contactId/addresses/:addressId', () => {
     expect(body.data.postal_code).toBe('12345')
   })
 })
+
+describe('DELETE /api/contacts/:contactId/addresses/:addressId', () => {
+  beforeEach(async () => {
+    await AddressTest.deleteAll()
+    await ContactTest.deleteAll()
+
+    await UserTest.create()
+    await ContactTest.create()
+    await AddressTest.create()
+  })
+
+  afterEach(async () => {
+    await AddressTest.deleteAll()
+    await ContactTest.deleteAll()
+    await UserTest.delete()
+  })
+
+  it('should reject if addrees is not exists', async () => {
+    const contact = await ContactTest.get()
+    const address = await AddressTest.get()
+
+    const response = await app.request(
+      `/api/contacts/${contact.id}/addresses/${address.id + 1}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: 'test',
+        },
+      }
+    )
+
+    expect(response.status).toBe(404)
+
+    const body = await response.json()
+
+    expect(body.errors).toBeDefined()
+  })
+  it('should success if addrees is exists', async () => {
+    const contact = await ContactTest.get()
+    const address = await AddressTest.get()
+
+    const response = await app.request(
+      `/api/contacts/${contact.id}/addresses/${address.id}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: 'test',
+        },
+      }
+    )
+
+    expect(response.status).toBe(200)
+
+    const body = await response.json()
+
+    expect(body.data).toBeTrue()
+  })
+})
