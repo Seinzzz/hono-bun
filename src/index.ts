@@ -11,6 +11,12 @@ app.get('/', (c) => {
   return c.text('ok!')
 })
 
+app.get('/ping', (c) => {
+  return c.json({
+    message: 'pong!',
+  })
+})
+
 app.route('/', userController)
 app.route('/', contactController)
 app.route('/', addressController)
