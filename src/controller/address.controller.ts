@@ -6,6 +6,7 @@ import { AddressService } from '../service/address.service'
 import {
   CreateAddressRequest,
   GetAddressRequest,
+  ListAddressRequest,
   RemoveAddressRequest,
   UpdateAddressRequest,
 } from '../model/address.model'
@@ -88,3 +89,17 @@ addressController.delete(
     })
   }
 )
+
+addressController.get('/api/contacts/:contact_id/addresses', async (c) => {
+  const user = c.get('user') as User
+
+  const request: ListAddressRequest = {
+    contact_id: Number(c.req.param('contact_id')),
+  }
+
+  const response = await AddressService.list(user, request)
+
+  return c.json({
+    data: response,
+  })
+})

@@ -29,4 +29,8 @@ export class AddressValidation {
     id: z.number().positive(),
     contact_id: z.number().positive(),
   })
+
+  static readonly LIST: ZodType = z.object({
+    contact_id: z.number().positive(),
+  })
 }
