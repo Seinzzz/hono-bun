@@ -7,20 +7,18 @@ import { addressController } from './controller/address.controller'
 
 const app = new Hono()
 
-app.get('/', (c) => {
-  return c.text('ok!')
-})
-
 app.get('/ping', (c) => {
   return c.json({
     message: 'pong!',
   })
 })
 
+// Register controllers
 app.route('/', userController)
 app.route('/', contactController)
 app.route('/', addressController)
 
+// Error handling middleware
 app.onError(async (err, c) => {
   if (err instanceof HTTPException) {
     c.status(err.status)
