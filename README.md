@@ -1,14 +1,12 @@
 <h1 align="center">
 
-🚧 **WIP** 🚧
-
 ![GitHub license](https://img.shields.io/github/license/seinzzz/hono-bun)
 
 </h1>
 
 # Backend Contact Management System
 
-This is a backend service for managing contacts, built with Bun and Hono. It provides a RESTful API to perform CRUD operations on contacts.
+This is a backend service for managing contacts, built using Bun and Hono. It provides a simple RESTful API interface for performing CRUD operations on contacts.
 
 ## Features
 

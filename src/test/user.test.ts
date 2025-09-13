@@ -223,7 +223,6 @@ describe('PATCH /api/users/current', () => {
     expect(response.status).toBe(200)
 
     const body = await response.json()
-    // logger.error(body)
 
     expect(body.data).toBeDefined()
     expect(body.data.username).toBe('test')
@@ -273,23 +272,27 @@ describe('DELETE /api/users/logout', () => {
   it('should be able to logout', async () => {
     const response = await app.request('/api/users/logout', {
       method: 'DELETE',
-      headers: {},
-    })
-  })
-
-  it('should not be able to logout', async () => {
-    const response = await app.request('/api/users/logout', {
-      method: 'DELETE',
       headers: {
         Authorization: 'test',
       },
     })
 
     expect(response.status).toBe(200)
+  })
+
+  it('should not be able to logout', async () => {
+    const response = await app.request('/api/users/logout', {
+      method: 'DELETE',
+      headers: {
+        Authorization: '234',
+      },
+    })
+
+    expect(response.status).toBe(401)
 
     const body = await response.json()
 
-    expect(body.data).toBe(true)
+    expect(body.data).toBe(null)
   })
 
   it('should not be able to logout if token is invalid', async () => {
