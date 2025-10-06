@@ -5,13 +5,13 @@
     "build-bin": "bun  build src/index.ts --compile --outfile hono-restful-api"
   },
   "dependencies": {
-    "@prisma/client": "^6.8.2",
-    "hono": "^4.7.10",
+    "@prisma/client": "^6.16.2",
+    "hono": "^4.9.9",
     "winston": "^3.17.0",
-    "zod": "^3.25.56"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "prisma": "^6.8.2"
+    "prisma": "^6.16.2"
   }
 }

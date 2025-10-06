@@ -62,7 +62,7 @@ Response Body (Error):
 
 ```json
 {
-  "errors": "Username already exists"
+  "errors": "Username or password is incorect"
 }
 ```
 
